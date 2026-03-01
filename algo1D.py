@@ -22,6 +22,16 @@ psi_prev = psi.copy()
 
 V = (x**2)/2
 
+Principale_DiagA = (1 + 1j*r + 0.5j*dt*(V)) * np.ones(Nx)
+Diags_Inf_SuppA = -0.5j*r * np.ones(Nx-1)
+A = diags([Diags_Inf_SuppA, Principale_DiagA, Diags_Inf_SuppA], [1,0,-1]).tocsc()
+
+Principale_DiagB = (1 - 1j*r - 0.5j*dt*(V)) * np.ones(Nx)
+Diags_Inf_SuppB = 0.5j*r * np.ones(Nx-1)
+B = diags([Diags_Inf_SuppB, Principale_DiagB, Diags_Inf_SuppB], [1,0,-1]).tocsc()
+
+
+
 fig, ax = plt.subplots()
 line, = ax.plot(x, np.abs(psi)**2, lw=2)
 ax.set_ylim(0, 1)
@@ -43,20 +53,16 @@ def animate(i):
 
     psi_prev = psi.copy()
 
-    Principale_DiagA = (1 + 1j*r + 0.5j*dt*(V + g*extrap_density)) * np.ones(Nx)
-    Diags_Inf_SuppA = -0.5j*r * np.ones(Nx-1)
-
-    A = diags([Diags_Inf_SuppA, Principale_DiagA, Diags_Inf_SuppA], [1,0,-1]).toarray()
-
-    Principale_DiagB = (1 - 1j*r - 0.5j*dt*(V + g*extrap_density)) * np.ones(Nx)
-    Diags_Inf_SuppB = 0.5j*r * np.ones(Nx-1)
-
-
-    B = diags([Diags_Inf_SuppB, Principale_DiagB, Diags_Inf_SuppB], [1,0,-1]).toarray()
+    Principale_DiagO = 0.5j*dt*g*extrap_density * np.ones(Nx)
 
     
 
-    psi_next = spsolve(A, B @ psi)
+    O = diags([Principale_DiagO],[0]).tocsc()
+
+    Atot = A+O
+    Btot = (B-O).dot(psi)
+
+    psi_next = spsolve(Atot, Btot)
 
     psi_prev = psi.copy()
     psi = psi_next.copy()
@@ -68,5 +74,5 @@ def animate(i):
     txt_g.set_text(f"Simulation GPE 1D (g = {g})")
     return line, txt_g
 
-ani = FuncAnimation(fig, animate, frames=200, interval=20, blit=True)
+ani = FuncAnimation(fig, animate, frames=200, interval=20, blit=False)
 plt.show()
