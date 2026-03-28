@@ -37,14 +37,14 @@ ax2.set_xlim(0, 100) #Règlage de la limite de l'axe X par defaut à 100.
 ax2.set_ylim(0, 1) #Règlage de la limite de l'axe Y par defaut à 1.
 ax2.set_title("Norme de Psi") #Titre du Graphique.
 
-"""On definit les diagonales de A (Inferieur, Principale et Superieur) 
+"""On definit les diagonales de A (Inferieure, Principale et Superieure) 
 puis on construit la matrice tridiagonales au format Compressed Sparse Column 
 pour plus de rapidité de calcul"""
 Principale_DiagA = (1 + 1j*r + 0.5j*dt*V) * np.ones(Nx)
 Diags_Inf_SuppA = -0.5j*r * np.ones(Nx-1)
 A = diags([Diags_Inf_SuppA, Principale_DiagA, Diags_Inf_SuppA], [1,0,-1]).tocsc()
 
-"""On definit les diagonales de B (Inferieur, Principale et Superieur) 
+"""On definit les diagonales de B (Inferieure, Principale et Superieure) 
 puis on construit la matrice tridiagonales au format Compressed Sparse Column 
 pour plus de rapidité de calcul"""
 Principale_DiagB = (1 - 1j*r - 0.5j*dt*V) * np.ones(Nx)
