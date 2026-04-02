@@ -22,12 +22,11 @@ psi_prev = psi.copy() #On copie cette fonction pour traiter la non linearité pl
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(9, 5)) #Créer deux sous plot pour y mettre l'animation et l'affichage de la norme aucours du temps.
 line, = ax1.plot(x, np.abs(psi)**2, lw=2) #règle les données à afficher en axe X et Y
 ax1.set_ylim(0, 1) #Etablit une limite pour l'axe Y
-ax1.set_ylabel('|psi|**2') #Donne un nom à l'axe Y
-ax1.set_xlabel('x') #Donne un nom à l'axe X
+ax1.set_ylabel(r'$|\Psi|²$') #Donne un nom à l'axe Y
+ax1.set_xlabel('Position(m)') #Donne un nom à l'axe X
 
 """Créer un texte et le modifie pour faire la simulation en fonction de l'interaction entre les bosons"""
-txt_g = ax1.text(0.05, 0.9, '', transform=ax1.transAxes, fontweight='bold')
-txt_g.set_text(f"Simulation GPE 1D (g = {g})")
+ax1.set_title(f"Simulation GPE 1D (g = {g})")
 
 """On règle les parmètres de l'autre graphique."""
 norms = [] #liste des valeurs de la norme de Psi.
@@ -35,7 +34,9 @@ times = [] #liste des iterations ou on calcule la norme de Psi.
 line2, = ax2.plot([], [], lw=2, color='red') #règle les données à afficher en axe X et Y
 ax2.set_xlim(0, 100) #Règlage de la limite de l'axe X par defaut à 100.
 ax2.set_ylim(0, 1) #Règlage de la limite de l'axe Y par defaut à 1.
-ax2.set_title("Norme de Psi") #Titre du Graphique.
+ax2.set_title(r"Norme de $\Psi$") #Titre du Graphique.
+ax2.set_xlabel("Temps(s)") #titre de l'axe x
+ax2.set_ylabel(r"Norme de $\Psi$") #titre de l'axe y
 
 """On definit les diagonales de A (Inferieure, Principale et Superieure) 
 puis on construit la matrice tridiagonales au format Compressed Sparse Column 
