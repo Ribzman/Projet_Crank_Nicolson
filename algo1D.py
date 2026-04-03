@@ -9,9 +9,10 @@ g = 10 #intensité des interaction entre bosons
 L =  20 #Longueur de l'axe X
 Nx = 500 #Nombre de valeur de x
 dx = np.sqrt(1/g)*(2*L)/Nx #Pas d'espace
-dt = 1/g * 0.1 #Pas de temps
+#dt = 1/g * 0.1
+dt = 0.5 * dx**2  #Pas de temps
 r = dt/(2*dx**2) #coefficient r trouvé lors de l'établissement de l'algorithme
-tmax = 1000 #itérations maximum de simulation
+tmax = 5000 #itérations maximum de simulation
 
 """Conditions initiales"""
 x = np.linspace(-L, L, Nx) #On initialise un vecteur avec des valeurs de x entre -L et L
@@ -31,9 +32,8 @@ g
 """On règle les parmètres de l'autre graphique."""
 norms = [] #liste des valeurs de la norme de Psi.
 times = [] #liste des iterations ou on calcule la norme de Psi.
-energies = [] #liste des énergies calculées
 line2, = ax2.plot([], [], lw=2, color='red') #règle les données à afficher en axe X et Y
-ax2.set_xlim(0, 100) #Règlage de la limite de l'axe X par defaut à 100.
+#ax2.set_xlim(0, 0.05) #Règlage de la limite de l'axe X par defaut à 100.
 ax2.set_ylim(0, 1) #Règlage de la limite de l'axe Y par defaut à 1.
 ax2.set_title(r"Norme de $\Psi$") #Titre du Graphique.
 ax2.set_xlabel("Temps(s)") #titre de l'axe x
@@ -41,7 +41,7 @@ ax2.set_ylabel(r"Norme de $\Psi$") #titre de l'axe y
 
 energies = [] #liste des énergies calculées
 line3, = ax3.plot([],[], lw=2, color ='green')
-ax3.set_xlim(0, 100) #Règlage de la limite de l'axe X par defaut à 100.
+#ax3.set_xlim(0, 0.05) #Règlage de la limite de l'axe X par defaut à 100.
 #ax3.set_ylim(0, 1) #Règlage de la limite de l'axe Y par defaut à 1.
 ax3.set_title(r"Energie de $\Psi$") #Titre du Graphique.
 ax3.set_xlabel("Temps(s)") #titre de l'axe x
@@ -72,46 +72,53 @@ def calculate_energy(psi, psi_prev):
     extrap_density = np.abs(1.5 * psi - 0.5 * psi_prev)**2
     
     grad2_psi = np.gradient(np.gradient(psi_extrap, dx), dx)
-    grad_density = np.real(np.conj(psi_extrap) * grad2_psi)**2
+    grad_density = np.real(np.conj(psi_extrap) * grad2_psi)
 
-    current_energy = np.sum((1/2 * grad_density + V * extrap_density + g/2 * extrap_density**2)* dx)
+    current_energy = np.sum((-1/2 * grad_density + V * extrap_density + g/2 * extrap_density**2)* dx)
     return current_energy
+
+steps_per_frame = 50
+phys_time = 0
 
 def animate(i): #definit la fonction d'animation et le corps d'excution de l'algorithme
 
-    global psi
-    global psi_prev
+    global psi, psi_prev, phys_time
 
-    extrap_density = np.abs((1.5 * psi - 0.5 * psi_prev))**2 
-    #Calcule la densité a partir de l'extrapolation.
+    for _ in range(0, steps_per_frame):
+        extrap_density = np.abs((1.5 * psi - 0.5 * psi_prev))**2 
+        #Calcule la densité a partir de l'extrapolation.
 
-    """Calcule la matrice diagonale et la convertit 
-    en Compressed Sparse Column pour plus de rapidité de calcul"""
-    Principale_DiagO = 0.5j*dt*g*extrap_density * np.ones(Nx)
-    O = diags([Principale_DiagO],[0]).tocsc() 
-   
-
-    Aprime = A + O #Calcule la matrice A prime
-    Bprime = B - O #Calcule la metrice B prime
-    res = Bprime.dot(psi) #On multiplie par la fonction psi
+        """Calcule la matrice diagonale et la convertit 
+        en Compressed Sparse Column pour plus de rapidité de calcul"""
+        Principale_DiagO = 0.5j*dt*g*extrap_density * np.ones(Nx)
+        O = diags([Principale_DiagO],[0]).tocsc() 
     
-    psi_next = spsolve(Aprime, res) #On resoud pour l'itération suivante de psi
 
-    """On met a jour psi_prev et psi"""
-    psi_prev = psi.copy() 
-    psi = psi_next.copy()
+        Aprime = A + O #Calcule la matrice A prime
+        Bprime = B - O #Calcule la metrice B prime
+        res = Bprime.dot(psi) #On multiplie par la fonction psi
+        
+        psi_next = spsolve(Aprime, res) #On resoud pour l'itération suivante de psi
 
-    current_norm = calculate_norm(psi) #On calcule la norme.
-    current_energy = calculate_energy(psi, psi_prev) #On calcule l'énergie
+        """On met a jour psi_prev et psi"""
+        psi_prev = psi.copy() 
+        psi = psi_next.copy()
+
+        phys_time += dt
+
     """On ajoute à chaque iteration la norme, l'energie et l'instant dans la liste correspondante."""
-    norms.append(current_norm)
-    energies.append(current_energy)
-    times.append(i)
+        
+    norms.append(calculate_norm(psi))
+    energies.append(calculate_energy(psi, psi_prev))
+    times.append(phys_time)
 
     """On redimensionne les axes si besoin."""
-    if i > 100:
-        ax2.set_xlim(0, 100+i)
-        ax3.set_xlim(0, 100+i)
+    if len(times) > 1:
+        ax2.set_xlim(0, times[-1])
+        ax3.set_xlim(0, times[-1])
+
+    if len(norms) > 1:
+        ax2.set_ylim(min(norms) * 0.9, max(norms) * 1.1) 
 
     if len(energies) > 1:
         ax3.set_ylim(min(energies) * 0.9, max(energies) * 1.1)
@@ -126,3 +133,4 @@ def animate(i): #definit la fonction d'animation et le corps d'excution de l'alg
 ani = FuncAnimation(fig, animate, frames=tmax, interval=20, blit=False)
 plt.tight_layout()
 plt.show()
+
