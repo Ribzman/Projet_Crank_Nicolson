@@ -133,4 +133,3 @@ def animate(i): #definit la fonction d'animation et le corps d'excution de l'alg
 ani = FuncAnimation(fig, animate, frames=tmax, interval=20, blit=False)
 plt.tight_layout()
 plt.show()
-
