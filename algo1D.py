@@ -16,10 +16,10 @@ tmax = 1000 #itérations maximum de simulation
 """Conditions initiales"""
 x = np.linspace(-L, L, Nx) #On initialise un vecteur avec des valeurs de x entre -L et L
 V = (x**2)/2 #On choisit une potentiel de piègeage harmonique
-psi = np.exp(0.5*(-x**2)/2).astype(complex) #On prend pour fonction d'onde de base une Gaussienne
+psi = np.exp((-x**2)/2).astype(complex) #On prend pour fonction d'onde de base une Gaussienne
 psi_prev = psi.copy() #On copie cette fonction pour traiter la non linearité plus tard
 
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(9, 5)) #Créer deux sous plot pour y mettre l'animation et l'affichage de la norme aucours du temps.
+fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(9, 5)) #Créer deux sous plot pour y mettre l'animation et l'affichage de la norme aucours du temps.
 line, = ax1.plot(x, np.abs(psi)**2, lw=2) #règle les données à afficher en axe X et Y
 ax1.set_ylim(0, 1) #Etablit une limite pour l'axe Y
 ax1.set_ylabel(r'$|\Psi|²$') #Donne un nom à l'axe Y
@@ -27,16 +27,25 @@ ax1.set_xlabel('Position(m)') #Donne un nom à l'axe X
 
 """Créer un texte et le modifie pour faire la simulation en fonction de l'interaction entre les bosons"""
 ax1.set_title(f"Simulation GPE 1D (g = {g})")
-
+g
 """On règle les parmètres de l'autre graphique."""
 norms = [] #liste des valeurs de la norme de Psi.
 times = [] #liste des iterations ou on calcule la norme de Psi.
+energies = [] #liste des énergies calculées
 line2, = ax2.plot([], [], lw=2, color='red') #règle les données à afficher en axe X et Y
 ax2.set_xlim(0, 100) #Règlage de la limite de l'axe X par defaut à 100.
 ax2.set_ylim(0, 1) #Règlage de la limite de l'axe Y par defaut à 1.
 ax2.set_title(r"Norme de $\Psi$") #Titre du Graphique.
 ax2.set_xlabel("Temps(s)") #titre de l'axe x
 ax2.set_ylabel(r"Norme de $\Psi$") #titre de l'axe y
+
+energies = [] #liste des énergies calculées
+line3, = ax3.plot([],[], lw=2, color ='green')
+ax3.set_xlim(0, 100) #Règlage de la limite de l'axe X par defaut à 100.
+#ax3.set_ylim(0, 1) #Règlage de la limite de l'axe Y par defaut à 1.
+ax3.set_title(r"Energie de $\Psi$") #Titre du Graphique.
+ax3.set_xlabel("Temps(s)") #titre de l'axe x
+ax3.set_ylabel(r"Energie de $\Psi$") #titre de l'axe y
 
 """On definit les diagonales de A (Inferieure, Principale et Superieure) 
 puis on construit la matrice tridiagonales au format Compressed Sparse Column 
@@ -51,6 +60,22 @@ pour plus de rapidité de calcul"""
 Principale_DiagB = (1 - 1j*r - 0.5j*dt*V) * np.ones(Nx)
 Diags_Inf_SuppB = 0.5j*r * np.ones(Nx-1)
 B = diags([Diags_Inf_SuppB, Principale_DiagB, Diags_Inf_SuppB], [1,0,-1]).tocsc()
+
+"""Fonction calculant la norme de Psi"""
+def calculate_norm(psi):
+    current_norm = np.sum(np.abs(psi)**2 * dx)
+    return current_norm
+
+"""Fonction calculant l'energie du condensat"""
+def calculate_energy(psi, psi_prev):
+    psi_extrap = 1.5 * psi - 0.5 * psi_prev
+    extrap_density = np.abs(1.5 * psi - 0.5 * psi_prev)**2
+    
+    grad2_psi = np.gradient(np.gradient(psi_extrap, dx), dx)
+    grad_density = np.real(np.conj(psi_extrap) * grad2_psi)**2
+
+    current_energy = np.sum((1/2 * grad_density + V * extrap_density + g/2 * extrap_density**2)* dx)
+    return current_energy
 
 def animate(i): #definit la fonction d'animation et le corps d'excution de l'algorithme
 
@@ -76,19 +101,26 @@ def animate(i): #definit la fonction d'animation et le corps d'excution de l'alg
     psi_prev = psi.copy() 
     psi = psi_next.copy()
 
-    current_norm = np.sum(np.abs(psi)**2 * dx) #On calcule la norme.
-    """On ajoute à chaque iteration la norme et l'instant dans la liste correspondante."""
+    current_norm = calculate_norm(psi) #On calcule la norme.
+    current_energy = calculate_energy(psi, psi_prev) #On calcule l'énergie
+    """On ajoute à chaque iteration la norme, l'energie et l'instant dans la liste correspondante."""
     norms.append(current_norm)
+    energies.append(current_energy)
     times.append(i)
 
     """On redimensionne les axes si besoin."""
     if i > 100:
         ax2.set_xlim(0, 100+i)
+        ax3.set_xlim(0, 100+i)
+
+    if len(energies) > 1:
+        ax3.set_ylim(min(energies) * 0.9, max(energies) * 1.1)
     
     line.set_ydata(np.abs(psi)**2) #On definit la donnée à utiliser
     line2.set_data(times[-tmax:], norms[-tmax:]) 
+    line3.set_data(times[-tmax:], energies[-tmax:])
     #On definit la donnée à utiliser (tmax premieres normes et instants)
-    return line, line2 #on retourne les deux courbes.
+    return line, line2, line3 #on retourne les deux courbes.
 
 """On définit la fênetre d'animation à partir de la fonction puis l'affiche"""
 ani = FuncAnimation(fig, animate, frames=tmax, interval=20, blit=False)
