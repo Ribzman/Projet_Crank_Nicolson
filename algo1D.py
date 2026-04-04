@@ -5,7 +5,7 @@ from scipy.sparse import diags #Utile pour créer les matrices diagonnales.
 from scipy.sparse.linalg import spsolve #Pour resoudre les equations avec des matrices creuses.
 
 """Constantes du problème"""
-g = 1 #intensité des interaction entre bosons
+g = 400 #intensité des interaction entre bosons
 L =  20 #Longueur de l'axe X
 Nx = 500 #Nombre de valeur de x
 dx = np.sqrt(1/g)*(2*L)/Nx #Pas d'espace
@@ -130,7 +130,7 @@ def animate(i): #definit la fonction d'animation et le corps d'excution de l'alg
     return line, line2, line3 #on retourne les deux courbes.
 
 """On définit la fênetre d'animation à partir de la fonction puis l'affiche"""
-ani = FuncAnimation(fig, animate, frames=tmax, interval=20, blit=False)
-ani.save('simulation_gpe.gif', writer='pillow', fps=30)
+ani = FuncAnimation(fig, animate, frames=500, interval=20, blit=False)
+ani.save('simulation_gpe-g-400.gif', writer='pillow', fps=30)
 plt.tight_layout()
-plt.show()
+#plt.show()
