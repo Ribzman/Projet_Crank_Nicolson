@@ -131,5 +131,6 @@ def animate(i): #definit la fonction d'animation et le corps d'excution de l'alg
 
 """On définit la fênetre d'animation à partir de la fonction puis l'affiche"""
 ani = FuncAnimation(fig, animate, frames=tmax, interval=20, blit=False)
+ani.save('simulation_gpe.gif', writer='pillow', fps=30)
 plt.tight_layout()
 plt.show()
