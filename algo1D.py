@@ -5,7 +5,7 @@ from scipy.sparse import diags #Utile pour créer les matrices diagonnales.
 from scipy.sparse.linalg import spsolve #Pour resoudre les equations avec des matrices creuses.
 
 """Constantes du problème"""
-g = 10 #intensité des interaction entre bosons
+g = 1 #intensité des interaction entre bosons
 L =  20 #Longueur de l'axe X
 Nx = 500 #Nombre de valeur de x
 dx = np.sqrt(1/g)*(2*L)/Nx #Pas d'espace
@@ -73,7 +73,7 @@ def calculate_energy(psi, psi_prev):
     
     grad2_psi = np.gradient(np.gradient(psi_extrap, dx), dx)
     grad_density = np.real(np.conj(psi_extrap) * grad2_psi)
-
+    print(grad_density)
     current_energy = np.sum((-1/2 * grad_density + V * extrap_density + g/2 * extrap_density**2)* dx)
     return current_energy
 
