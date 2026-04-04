@@ -68,13 +68,13 @@ def calculate_norm(psi):
 
 """Fonction calculant l'energie du condensat"""
 def calculate_energy(psi, psi_prev):
-    psi_extrap = 1.5 * psi - 0.5 * psi_prev
-    extrap_density = np.abs(1.5 * psi - 0.5 * psi_prev)**2
+    psi_extrap = 1.5 * psi - 0.5 * psi_prev #Calcul de Psi extrapolée
+    extrap_density = np.abs(1.5 * psi - 0.5 * psi_prev)**2  #Calcul de la densité extrapolée
     
-    grad2_psi = np.gradient(np.gradient(psi_extrap, dx), dx)
-    grad_density = np.real(np.conj(psi_extrap) * grad2_psi)
-    print(grad_density)
-    current_energy = np.sum((-1/2 * grad_density + V * extrap_density + g/2 * extrap_density**2)* dx)
+    grad2_psi = np.gradient(np.gradient(psi_extrap, dx), dx) #Calcul du gradient 2 ème de psi
+    grad_density = -np.real(np.conj(psi_extrap) * grad2_psi) #Calcul du terme en densité gradient 
+
+    current_energy = np.sum((1/2 * grad_density + V * extrap_density + g/2 * extrap_density**2)* dx) #Calcul de l'énergie
     return current_energy
 
 steps_per_frame = 50
@@ -126,7 +126,7 @@ def animate(i): #definit la fonction d'animation et le corps d'excution de l'alg
     line.set_ydata(np.abs(psi)**2) #On definit la donnée à utiliser
     line2.set_data(times[-tmax:], norms[-tmax:]) 
     line3.set_data(times[-tmax:], energies[-tmax:])
-    #On definit la donnée à utiliser (tmax premieres normes et instants)
+    #On definit la donnée à utiliser (tmax premieres normes, énergies et instants)
     return line, line2, line3 #on retourne les deux courbes.
 
 """On définit la fênetre d'animation à partir de la fonction puis l'affiche"""
