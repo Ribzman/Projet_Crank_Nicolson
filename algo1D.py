@@ -7,7 +7,7 @@ from scipy.sparse.linalg import spsolve #Pour resoudre les equations avec des ma
 """Constantes du problème"""
 g = 1 #intensité des interaction entre bosons
 L =  20 #Longueur de l'axe X
-Nx = 500 #Nombre de valeur de x
+Nx =    1024 #Nombre de valeur de x
 dx = np.sqrt(1/g)*(2*L)/Nx #Pas d'espace
 #dt = 1/g * 0.1
 dt = 0.5 * dx**2  #Pas de temps

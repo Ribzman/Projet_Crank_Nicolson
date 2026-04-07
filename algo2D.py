@@ -28,7 +28,7 @@ theta1 =np.arctan2(Y+3, X-3)
 theta2 =np.arctan2(Y-3, X+3)
 theta3 = np.arctan2(Y-2,X)
 
-psi = np.exp(0.5* (-(X**2+Y**2))/(2*sigma**2)).astype(complex)
+psi = np.exp(0.5* (-(X**2+Y**2))/(2*sigma**2))*np.exp(1j*theta3).astype(complex)
 psi /= np.sqrt(np.sum(np.abs(psi)**2) * dx * dy)
 psi2D = psi.flatten().astype(complex)
 
