@@ -5,12 +5,12 @@ from scipy.sparse import diags #Utile pour créer les matrices diagonnales.
 from scipy.sparse.linalg import spsolve #Pour resoudre les equations avec des matrices creuses.
 
 """Constantes du problème"""
-g = 1 #intensité des interaction entre bosons
+g = 100 #intensité des interaction entre bosons
 L =  20 #Longueur de l'axe X
 Nx =    1024 #Nombre de valeur de x
-dx = np.sqrt(1/g)*(2*L)/Nx #Pas d'espace
+dx = np.sqrt(1/g)*(2*L)/2*Nx #Pas d'espace
 #dt = 1/g * 0.1
-dt = 0.5 * dx**2  #Pas de temps
+dt = 0.25 * dx**2  #Pas de temps
 r = dt/(2*dx**2) #coefficient r trouvé lors de l'établissement de l'algorithme
 tmax = 5000 #itérations maximum de simulation
 
