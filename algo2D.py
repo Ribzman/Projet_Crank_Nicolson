@@ -15,7 +15,7 @@ x  = np.linspace(-L, L, Nx)
 y  = np.linspace(-L, L, Ny)
 dx = np.sqrt(1/g) * (2*L/Nx)
 dy = np.sqrt(1/g) * (2*L/Ny)
-dt = 0.01 * dx**2
+dt = 0.25 * dx**2
 
 rx = -dt / (4j * dx**2)
 ry = -dt / (4j * dy**2)
@@ -47,15 +47,15 @@ def calculate_norm(psi2D):
     return np.sum(np.abs(psi2D.reshape(Nx, Ny))**2) * dx * dy
 
 
-def calculate_energy(psi2D):
-    p = psi2D.reshape(Nx, Ny)
-    density = np.abs(p)**2
+def calculate_energy(psi2D, psi_prev):
+    p_extrap = (1.5 * psi2D - 0.5 * psi_prev).reshape(Nx,Ny)
+    density = np.abs(p_extrap)**2
 
-    d2x = np.gradient(np.gradient(p, dx, axis=1), dx, axis=1)
-    d2y = np.gradient(np.gradient(p, dy, axis=0), dy, axis=0)
+    d2x = np.gradient(np.gradient(p_extrap, dx, axis=1), dx, axis=1)
+    d2y = np.gradient(np.gradient(p_extrap, dy, axis=0), dy, axis=0)
     laplacian = d2x + d2y
 
-    E1 = 0.5 * np.sum(-np.real(np.conj(p) * laplacian)) * dx * dy
+    E1 = 0.5 * np.sum(-np.real(np.conj(p_extrap) * laplacian)) * dx * dy
     E2 = np.sum(V * density) * dx * dy
     E3 = 0.5*g * np.sum(density**2) * dx * dy
 
@@ -99,7 +99,7 @@ ax4.set_title('Energy E(t)')
 ax5.set_title('Angular Momentum')
 
 phys_time = 0
-step = 10
+step = 1
 
 
 def animate(i):
@@ -121,7 +121,7 @@ def animate(i):
 
     
     norms.append(calculate_norm(psi2D))
-    energies.append(calculate_energy(psi2D))
+    energies.append(calculate_energy(psi2D, psi_prev))
     angular_momentums.append(calculate_angular_momentum(psi2D))
     times.append(phys_time * g)
     
