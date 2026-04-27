@@ -9,7 +9,7 @@ Nx = 64
 Ny = Nx
 N  = Nx * Ny
 L  = 10
-g  = 1
+g  = 100
 
 x  = np.linspace(-L, L, Nx)
 y  = np.linspace(-L, L, Ny)
@@ -144,7 +144,7 @@ def animate(i):
     ax5.set_xlim(0, 2 * np.max(times))
 
 
-    return [im, ang, Norm, Energy]
+    return [im, ang, Norm, Energy, AngMom]
 
 
 ani = FuncAnimation(fig, animate, frames=tmax, interval=1, blit=False)
