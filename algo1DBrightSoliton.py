@@ -5,9 +5,9 @@ from scipy.sparse import diags #Utile pour créer les matrices diagonnales.
 from scipy.sparse.linalg import spsolve #Pour resoudre les equations avec des matrices creuses.
 
 """Constantes du problème"""
-g = -100 #intensité des interaction entre bosons
+g = 1 #intensité des interaction entre bosons
 L =  20 #Longueur de l'axe X
-Nx =    1024 #Nombre de valeur de x
+Nx = 1024 #Nombre de valeur de x
 dx = np.sqrt(1/abs(g))*(2*L)/2*Nx #Pas d'espace
 #dt = 1/g * 0.1
 dt = 0.25 * dx**2  #Pas de temps
@@ -17,10 +17,11 @@ tmax = 5000 #itérations maximum de simulation
 """Conditions initiales"""
 x = np.linspace(-L, L, Nx) #On initialise un vecteur avec des valeurs de x entre -L et L
 V = np.zeros(Nx) #On choisit une potentiel de piègeage nul
-psi0 = 1.0
+v = 100
+psi0 = 0.5
 mu = g * psi0**2 / 2          
 k = np.sqrt(2 * abs(mu))
-psi = (psi0 / np.cosh(k * x)).astype(complex)
+psi = (psi0 / np.cosh(k * x))*np.exp(1j * v * x).astype(complex)
 psi_prev = psi.copy()
 
 fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(9, 5)) #Créer deux sous plot pour y mettre l'animation et l'affichage de la norme aucours du temps.
@@ -80,7 +81,7 @@ def calculate_energy(psi, psi_prev):
     current_energy = np.sum((1/2 * grad_density + V * extrap_density + g/2 * extrap_density**2)* dx) #Calcul de l'énergie
     return current_energy
 
-steps_per_frame = 50
+steps_per_frame = 1000
 phys_time = 0
 
 def animate(i): #definit la fonction d'animation et le corps d'excution de l'algorithme

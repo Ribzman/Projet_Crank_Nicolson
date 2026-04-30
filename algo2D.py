@@ -8,7 +8,7 @@ tmax = 5000
 Nx = 64
 Ny = Nx
 N  = Nx * Ny
-L  = 10
+L  = 30
 g  = 100
 
 x  = np.linspace(-L, L, Nx)
@@ -69,7 +69,7 @@ def calculate_angular_momentum(psi2D):
 
     i = np.conj(p) * (-1j) * (X * grady - Y * gradx)
 
-    return np.sum(np.abs(i)* dx* dy)
+    return np.real(np.sum(i* dx* dy))
 
 fig, axes = plt.subplots(2, 3, figsize=(12, 8))
 ax1, ax2, ax_empty = axes[0]

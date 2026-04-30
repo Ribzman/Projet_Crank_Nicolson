@@ -19,7 +19,8 @@ x = np.linspace(-L, L, Nx) #On initialise un vecteur avec des valeurs de x entre
 V = (x**2)/2 #On choisit une potentiel de piègeage harmonique
 psi0 = 1.0
 xi = 1.0 / np.sqrt(g)
-psi = (psi0 * np.tanh(x / (np.sqrt(2) * xi))).astype(complex)
+v = 2
+psi = psi0 * (1j * v + np.tanh(x / (np.sqrt(2) * xi)) *np.exp(1j * v * x)).astype(complex)
 psi_prev = psi.copy()
 
 fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(9, 5)) #Créer deux sous plot pour y mettre l'animation et l'affichage de la norme aucours du temps.
