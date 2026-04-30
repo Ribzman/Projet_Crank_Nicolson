@@ -15,7 +15,7 @@ x  = np.linspace(-L, L, Nx)
 y  = np.linspace(-L, L, Ny)
 dx = np.sqrt(1/g) * (2*L/Nx)
 dy = np.sqrt(1/g) * (2*L/Ny)
-dt = 0.25 * dx**2
+dt = 0.1 * dx**2
 
 rx = -dt / (4j * dx**2)
 ry = -dt / (4j * dy**2)
@@ -26,7 +26,7 @@ sigma = 4
 theta = np.arctan2(Y-3, X+3)
 theta2 = np.arctan2(Y+3, X-3)
 
-psi = np.exp(-0.5 * (X**2 + Y**2) / (2*sigma**2)) * np.exp(1j*theta).astype(complex)
+psi = np.exp(-0.5 * (X**2 + Y**2) / (2*sigma**2)) * np.exp(1j*theta)*np.exp(1j*theta2).astype(complex)
 psi2D = psi.flatten()
 
 V  = 0.5 * (X**2 + Y**2)
