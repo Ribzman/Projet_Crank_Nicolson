@@ -117,7 +117,7 @@ def animate(i):
     
 
     density_2d = np.abs(psi2D.reshape(Nx, Ny))**2
-    phase      = np.angle(psi2D.reshape(Nx, Ny))
+    phase = np.angle(psi2D.reshape(Nx, Ny))
 
     
     norms.append(calculate_norm(psi2D))
