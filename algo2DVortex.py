@@ -23,8 +23,10 @@ ry = -dt / (4j * dy**2)
 X, Y = np.meshgrid(x, y)
 
 sigma = 4
+theta = np.arctan2(Y-3, X+3)
+theta2 = np.arctan2(Y+3, X-3)
 
-psi = np.exp(-0.5 * (X**2 + Y**2) / (2*sigma**2)).astype(complex)
+psi = np.exp(-0.5 * (X**2 + Y**2) / (2*sigma**2)) * np.exp(1j*theta).astype(complex)
 psi2D = psi.flatten()
 
 V  = 0.5 * (X**2 + Y**2)
