@@ -8,8 +8,8 @@ tmax = 5000
 Nx = 64
 Ny = Nx
 N  = Nx * Ny
-L  = 30
-g  = 100
+L  = 6
+g  = 400
 
 x  = np.linspace(-L, L, Nx)
 y  = np.linspace(-L, L, Ny)
@@ -59,6 +59,7 @@ def calculate_energy(psi2D, psi_prev):
 
     return np.real(E1+E2+E3)
 
+"""
 def calculate_angular_momentum(psi2D):
     p = psi2D.reshape(Nx,Ny)
 
@@ -68,21 +69,21 @@ def calculate_angular_momentum(psi2D):
     i = np.conj(p) * (-1j) * (X * grady - Y * gradx)
 
     return np.real(np.sum(i* dx* dy))
+"""
 
 fig, axes = plt.subplots(2, 3, figsize=(12, 8))
 ax1, ax2, ax_empty = axes[0]
 ax3, ax4, ax5      = axes[1]
 ax_empty.set_visible(False)
-ax5.set_visible(True)
+ax5.set_visible(False)
+ax2.set_visible(False)
 extent = [-L, L, -L, L]
 
 im  = ax1.imshow(np.abs(psi2D.reshape(Nx, Ny))**2, interpolation='bilinear', extent=extent, origin='lower', cmap='magma')
 ang = ax2.imshow(np.angle(psi2D.reshape(Nx, Ny)), norm=plt.Normalize(-np.pi, np.pi), interpolation='nearest', extent=extent, origin='lower', cmap='hsv')
 
 plt.colorbar(im,  ax=ax1, label='Density |ψ|²')
-plt.colorbar(ang, ax=ax2, label='Phase')
 ax1.set_title('Density |ψ|²')
-ax2.set_title('Phase ψ')
 
 norms    = []
 times    = []
@@ -120,7 +121,7 @@ def animate(i):
     
     norms.append(calculate_norm(psi2D))
     energies.append(calculate_energy(psi2D, psi_prev))
-    angular_momentums.append(calculate_angular_momentum(psi2D))
+    #angular_momentums.append(calculate_angular_momentum(psi2D))
     times.append(phys_time * g)
     
     
@@ -132,14 +133,14 @@ def animate(i):
 
     Norm.set_data(times, norms)
     Energy.set_data(times, energies)
-    AngMom.set_data(times, angular_momentums)
+    #AngMom.set_data(times, angular_momentums)
 
     ax3.set_ylim(0, 2 * np.max(norms))
     ax4.set_ylim(0, 2 * np.max(energies))
-    ax5.set_ylim(0, 2 * np.max(angular_momentums))
+    #ax5.set_ylim(0, 2 * np.max(angular_momentums))
     ax3.set_xlim(0, 2 * np.max(times))
     ax4.set_xlim(0, 2 * np.max(times))
-    ax5.set_xlim(0, 2 * np.max(times))
+    #ax5.set_xlim(0, 2 * np.max(times))
 
 
     return [im, ang, Norm, Energy, AngMom]
