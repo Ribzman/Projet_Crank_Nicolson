@@ -5,12 +5,12 @@ from scipy.sparse import diags #Utile pour créer les matrices diagonnales.
 from scipy.sparse.linalg import spsolve #Pour resoudre les equations avec des matrices creuses.
 
 """Constantes du problème"""
-g = 10 #intensité des interaction entre bosons
-L =  30 #Longueur de l'axe X
-Nx = 1024 #Nombre de valeur de x
+g = 1 #intensité des interaction entre bosons
+L =  20 #Longueur de l'axe X
+Nx = 2000 #Nombre de valeur de x
 dx = np.sqrt(1/np.abs(g))*(2*L)/(Nx) #Pas d'espace
 #dt = 1/np.abs(g) * 0.1
-dt = 0.12 * dx**2  #Pas de temps
+dt = 0.25 * dx**2  #Pas de temps
 r = dt/(2*dx**2) #coefficient r trouvé lors de l'établissement de l'algorithme
 tmax = 5000 #itérations maximum de simulation
 sigma = 1
@@ -19,7 +19,7 @@ sigma = 1
 """Conditions initiales"""
 x = np.linspace(-L, L, Nx) #On initialise un vecteur avec des valeurs de x entre -L et L
 V = (x**2)/2 #On choisit une potentiel de piègeage harmonique
-psi = 0.5 * np.exp((-x**2)/(2*sigma**2)).astype(complex) #On prend pour fonction d'onde de base une Gaussienne
+psi = np.exp((-x**2)/(2*sigma**2)).astype(complex) #On prend pour fonction d'onde de base une Gaussienne
 psi_prev = psi.copy() #On copie cette fonction pour traiter la non linearité plus tard
 
 fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(9, 5)) #Créer deux sous plot pour y mettre l'animation et l'affichage de la norme aucours du temps.
@@ -106,8 +106,8 @@ def animate(i): #definit la fonction d'animation et le corps d'excution de l'alg
         psi_prev = psi.copy() 
         psi = psi_next.copy()
 
-        phys_time += (dt/steps_per_frame)*i
-
+        phys_time += dt
+        
     """On ajoute à chaque iteration la norme, l'energie et l'instant dans la liste correspondante."""
         
     norms.append(calculate_norm(psi))
