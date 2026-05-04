@@ -10,21 +10,21 @@ L'équation de Gross-Pitaevskii décrit la dynamique d'un condensat de Bose-Eins
 # Résultats:
 ### g = 1 — 
 
-![Simulation g=1](gifs/simulation_g1.gif)
+![Simulation g=1](SimulationGPE1D/simulation_g1_20260504_142530.gif)
 
 ---
 
 ### g = 10 — 
-![Simulation g=10](gifs/simulation_g10.gif)
+![Simulation g=10](SimulationGPE1D/simulation_g10_20260504_142749.gif)
 
 ---
 
 ### g = 100 — 
 
-![Simulation g=100](gifs/simulation_g100.gif)
+![Simulation g=100](SimulationGPE1D/simulation_g100_20260504_143013.gif)
 
 ---
 
 ### g = 400 — 
 
-![Simulation g=400](gifs/simulation_g400.gif)
+![Simulation g=400](SimulationGPE1D/simulation_g400_20260504_143348.gif)
