@@ -13,8 +13,9 @@ dx = np.sqrt(1/np.abs(g))*(2*L)/(Nx) #Pas d'espace
 dt = 0.25 * dx**2  #Pas de temps
 r = dt/(2*dx**2) #coefficient r trouvé lors de l'établissement de l'algorithme
 tmax = 5000 #itérations maximum de simulation
-sigma = 1
-
+sigma = 1 #Etalement du condensat
+steps_per_frame = 100 #Nombre d'iteration avant chaque affichage
+phys_time = 0 #temps physique réel
 
 """Conditions initiales"""
 x = np.linspace(-L, L, Nx) #On initialise un vecteur avec des valeurs de x entre -L et L
@@ -22,15 +23,18 @@ V = (x**2)/2 #On choisit une potentiel de piègeage harmonique
 psi = np.exp((-x**2)/(2*sigma**2)).astype(complex) #On prend pour fonction d'onde de base une Gaussienne
 psi_prev = psi.copy() #On copie cette fonction pour traiter la non linearité plus tard
 
-fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(9, 5)) #Créer deux sous plot pour y mettre l'animation et l'affichage de la norme aucours du temps.
+
+
+"""On instancie les graphiques que l'on va utiliser"""
+fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(9, 5)) #Créer trois sous plot pour y mettre l'animation, l'affichage de la norme et de l'énergie aucours du temps.
 line, = ax1.plot(x, np.abs(psi)**2, lw=2) #règle les données à afficher en axe X et Y
 ax1.set_ylim(0, 1) #Etablit une limite pour l'axe Y
 ax1.set_ylabel(r'$|\Psi|²$') #Donne un nom à l'axe Y
 ax1.set_xlabel('Position(m)') #Donne un nom à l'axe X
 
-"""Créer un texte et le modifie pour faire la simulation en fonction de l'interaction entre les bosons"""
+"""On crée un texte et le modifie pour faire la simulation en fonction de l'interaction entre les bosons"""
 ax1.set_title(f"Simulation GPE 1D (g = {g})")
-g
+
 """On règle les parmètres de l'autre graphique."""
 norms = [] #liste des valeurs de la norme de Psi.
 times = [] #liste des iterations ou on calcule la norme de Psi.
@@ -63,10 +67,11 @@ Principale_DiagB = (1 - 1j*r - 0.5j*dt*V) * np.ones(Nx)
 Diags_Inf_SuppB = 0.5j*r * np.ones(Nx-1)
 B = diags([Diags_Inf_SuppB, Principale_DiagB, Diags_Inf_SuppB], [1,0,-1]).tocsc()
 
+
+
 """Fonction calculant la norme de Psi"""
 def calculate_norm(psi):
-    current_norm = np.sum(np.abs(psi)**2 * dx)
-    return current_norm
+    return np.sum(np.abs(psi)**2 * dx) #Calcul de la norme
 
 """Fonction calculant l'energie du condensat"""
 def calculate_energy(psi, psi_prev):
@@ -79,27 +84,29 @@ def calculate_energy(psi, psi_prev):
     current_energy = np.sum((1/2 * grad_density + V * extrap_density + g/2 * extrap_density**2)* dx) #Calcul de l'énergie
     return current_energy
 
-steps_per_frame = 100
-phys_time = 0
+"""Fonction qui construit la Matrice O"""
+def Construct_O(psi, psi_prev):
+    extrap_density = np.abs((1.5 * psi - 0.5 * psi_prev))**2 #Calcule la densité a partir de l'extrapolation.
 
-def animate(i): #definit la fonction d'animation et le corps d'excution de l'algorithme
+    """Calcule la matrice diagonale et la convertit 
+    en Compressed Sparse Column pour plus de rapidité de calcul"""
+    Principale_DiagO = 0.5j*dt*g*extrap_density * np.ones(Nx)
+    
+    return diags([Principale_DiagO],[0]).tocsc()
+    
+
+
+"""Definit la fonction d'animation et le corps d'excution de l'algorithme"""
+def animate(i):
 
     global psi, psi_prev, phys_time
-
+    """On definit le corps de l'algorithme en construisant la matrice O et en inversant la Matrice A+O construite"""
     for _ in range(0, steps_per_frame):
-        extrap_density = np.abs((1.5 * psi - 0.5 * psi_prev))**2 
-        #Calcule la densité a partir de l'extrapolation.
-
-        """Calcule la matrice diagonale et la convertit 
-        en Compressed Sparse Column pour plus de rapidité de calcul"""
-        Principale_DiagO = 0.5j*dt*g*extrap_density * np.ones(Nx)
-        O = diags([Principale_DiagO],[0]).tocsc() 
-    
+        O = Construct_O(psi, psi_prev)
 
         Aprime = A + O #Calcule la matrice A prime
         Bprime = B - O #Calcule la matrice B prime
         res = Bprime.dot(psi) #On multiplie par la fonction psi
-        
         psi_next = spsolve(Aprime, res) #On resoud pour l'itération suivante de psi
 
         """On met a jour psi_prev et psi"""
@@ -109,7 +116,6 @@ def animate(i): #definit la fonction d'animation et le corps d'excution de l'alg
         phys_time += dt
         
     """On ajoute à chaque iteration la norme, l'energie et l'instant dans la liste correspondante."""
-        
     norms.append(calculate_norm(psi))
     energies.append(calculate_energy(psi, psi_prev))
     times.append(phys_time)
