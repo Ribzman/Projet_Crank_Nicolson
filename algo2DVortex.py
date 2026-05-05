@@ -74,9 +74,9 @@ def calculate_angular_momentum(psi2D):
     gradx = np.gradient(p, dx, axis=1) #gradient de psi selon x
     grady = np.gradient(p, dy, axis=0) #gradient de psi selon y
 
-    i = np.conj(p) * (-1j) * (X * grady - Y * gradx) #intégrande de l'opérateur Lz = -i(x*dy - y*dx)
+    i = np.conj(p) * (-1j) * (X * grady - Y * gradx) #intégrande
 
-    return np.real(np.sum(i* dx* dy)) #valeur moyenne de Lz (quantifiée pour un vortex pur)
+    return np.real(np.sum(i* dx* dy))
 
 """Fonction qui construit la matrice O"""
 def construct_O(psi2D, psi_prev):
