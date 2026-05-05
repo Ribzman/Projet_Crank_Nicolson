@@ -32,7 +32,7 @@ L'équation de Gross-Pitaevskii décrit la dynamique d'un condensat de Bose-Eins
 
 # Simulation Vortex 2D
 
-Cette section explore la dynamique des fluides quantiques en deux dimensions, permettant l'observation de structures topologiques complexes.
+Cette section permet l'observation de structures topologiques complexes.
 
 ## Vortex Centré
 
@@ -44,7 +44,7 @@ Cette section explore la dynamique des fluides quantiques en deux dimensions, pe
 ---
 
 ### g = 10, L=10, $\sigma$=3
-![Vortex centré g=10](SimulationGPE2DVortex/simulation_g10_20260505_181110(Vortex_Centre).gif.gif)
+![Vortex centré g=10](SimulationGPE2DVortex/simulation_g10_20260505_181110(Vortex_Centre).gif)
 
 ---
 
