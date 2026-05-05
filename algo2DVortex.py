@@ -6,10 +6,10 @@ from matplotlib.animation import FuncAnimation
 
 """Constantes Physiques"""
 tmax = 5000 #nombre maximal d'itération de la boucle d'animation
-Nx, Ny = 64, 64 #longueur et largeur de la grille 
+Nx, Ny = 100, 100 #longueur et largeur de la grille 
 N  = Nx * Ny #taille totale de la grille aplatie en 1D
-L  = 20 #demi-taille physique du système (domaine de -L à +L)
-g  = 100 #constante d'interaction entre les bosons 
+L  = 30 #demi-taille physique du système (domaine de -L à +L)
+g  = 400 #constante d'interaction entre les bosons 
 phys_time = 0 #temps physique cumulé
 step = 1 #nombre de pas de temps effectués par frame
 
