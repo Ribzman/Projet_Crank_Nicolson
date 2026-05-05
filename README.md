@@ -55,3 +55,21 @@ Cette section permet l'observation de structures topologiques complexes.
 
 ### g = 400, L=30, $\sigma$=4
 ![Vortex centré g=400](SimulationGPE2DVortex/simulation_g400_20260505_182358(Vortex_Centre).gif)
+
+## Deux vortex excentrés
+
+Étude de la précession de deux vortex placé dans un condensat pour différentes forces d'interaction ($g$).
+
+### g = 1, L=6, $\sigma$=2
+
+---
+
+### g = 10, L=10, $\sigma$=3
+
+---
+
+### g = 100, L=20, $\sigma$=4
+
+---
+
+### g = 400, L=30, $\sigma$=4
