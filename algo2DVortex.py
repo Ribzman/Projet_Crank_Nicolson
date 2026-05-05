@@ -78,7 +78,8 @@ def calculate_angular_momentum(psi2D):
 
     return np.real(np.sum(i* dx* dy)) #valeur moyenne de Lz (quantifiée pour un vortex pur)
 
-def construct_O(psi, psi_prev):
+"""Fonction qui construit la matrice O"""
+def construct_O(psi2D, psi_prev):
     avg_density = np.abs(1.5 * psi2D - 0.5 * psi_prev)**2 #densité extrapolée à mi-pas pour le terme non-linéaire
     return diags([0.5j * dt * g * avg_density], [0], format='csc') #diagonale du terme d'interaction semi-implicite
 
@@ -109,8 +110,6 @@ ax3.set_title(r'Norm $|| \psi ||^2$')         #titre du graphe de norme
 ax4.set_title(r'Energy $E(t)$')        #titre du graphe d'énergie
 ax5.set_title(r'Angular Momentum $L_z$')   #titre du graphe de moment cinétique
 
-
-
 """Boucle d'animation"""
 def animate(i):
     global psi2D, phys_time  #variables globales modifiées à chaque frame
@@ -118,7 +117,7 @@ def animate(i):
     for _ in range(step):
         psi_prev = psi2D.copy() #sauvegarde de l'intération précédente
         
-        O = construct_O(psi, psi_prev)
+        O = construct_O(psi2D, psi_prev)
         psi_next = spsolve((A + O), (B - O) @ psi2D) #résolution du système linéaire creux
 
         psi2D = psi_next #mise à jour de la fonction d'onde
