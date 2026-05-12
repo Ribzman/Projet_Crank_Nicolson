@@ -78,3 +78,7 @@ Cette section permet l'observation de structures topologiques complexes.
 # Bright Soliton dans la simulation 1D
 
 ![Simulation g=-1](SimulationSoliton/simulation_BrightSoliton.gif)
+
+# Profil de Densité de Thomas-Fermi
+
+![Simulation g=1](Simulation2DTF/simulation_GPE_2D.gif)
