@@ -61,15 +61,16 @@ Cette section permet l'observation de structures topologiques complexes.
 Étude de la précession de deux vortex placé dans un condensat pour différentes forces d'interaction ($g$).
 
 ### g = 1, L=6, $\sigma$=2
-
+![Simulation g=10](SimulationGPE2DVortex/2Vortex/simulation_g1_20260512_134607.gif)
 ---
 
 ### g = 10, L=10, $\sigma$=3
-
+![Simulation g=10](SimulationGPE2DVortex/2Vortex/simulation_g10_20260512_135004.gif)
 ---
 
 ### g = 100, L=20, $\sigma$=4
-
+![Simulation g=10](SimulationGPE2DVortex/2Vortex/simulation_g100_20260512_135426.gif)
 ---
 
 ### g = 400, L=30, $\sigma$=4
+![Simulation g=10](SimulationGPE2DVortex/2Vortex/simulation_g400_20260512_135805.gif)
