@@ -31,7 +31,7 @@ V0 = V.flatten() #version aplatie pour la construction des matrices
 
 """Condition Initiale"""
 sigma  = 1 #largeur du paquet d'onde gaussien initial
-density_profile = np.maximum(0,((0.5 * L**2)-V)/g)
+density_profile = np.maximum(0,((0.5 * (L/2)**2)-V)/g)
 theta  = np.arctan2(Y, X) #angle centré à l'origine (charge +1)
 theta2 = np.arctan2(Y+2, X-2) #angle centré en un point (2,-2) (charge +1)
 theta3 = np.arctan2(Y-2, X+2) #angle centré en un point (-2,2) (charge +1)
