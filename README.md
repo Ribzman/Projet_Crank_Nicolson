@@ -74,3 +74,7 @@ Cette section permet l'observation de structures topologiques complexes.
 
 ### g = 400, L=30, $\sigma$=4
 ![Simulation g=10](SimulationGPE2DVortex/2Vortex/simulation_g400_20260512_135805.gif)
+
+# Bright Soliton dans la simulation 1D
+
+![Simulation g=-1](SimulationSoliton/simulation_BrightSoliton.gif)
