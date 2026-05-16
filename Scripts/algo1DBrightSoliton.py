@@ -17,10 +17,9 @@ tmax = 5000 #itérations maximum de simulation
 """Conditions initiales"""
 x = np.linspace(-L, L, Nx) #On initialise un vecteur avec des valeurs de x entre -L et L
 V = np.zeros(Nx) #On choisit une potentiel de piègeage nul
-v = 1
-psi = (1 / np.cosh(1 * (x + 5))) * np.exp(1j * v * x).astype(complex)
-psi_prev = psi.copy()
-psi_prev = psi.copy()
+v = 1 #vitesse du soliton
+psi = (1 / np.cosh(1 * (x + 5))) * np.exp(1j * v * x).astype(complex) #fonction d'onde initiale
+psi_prev = psi.copy()#copie pour le traitement de la non linéarité
 
 fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(9, 5)) #Créer deux sous plot pour y mettre l'animation et l'affichage de la norme aucours du temps.
 line, = ax1.plot(x, np.abs(psi)**2, lw=2) #règle les données à afficher en axe X et Y
