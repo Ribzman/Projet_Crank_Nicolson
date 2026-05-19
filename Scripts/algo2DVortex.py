@@ -29,8 +29,8 @@ X, Y = np.meshgrid(x, y) #grille 2D de coordonnées spatiales
 sigma  = 3 #largeur du paquet d'onde gaussien initial
 theta  = np.arctan2(Y, X) #angle centré à l'origine (charge +1)
 theta2 = np.arctan2(Y+2, X-2) #angle centré en un point (2,-2) (charge +1)
-theta2 = np.arctan2(Y-2, X+2) #angle centré en un point (-2,2) (charge +1)
-psi    = np.exp(-0.5 * (X**2 + Y**2) / (2*sigma**2)) * np.exp(1j*theta).astype(complex) #gaussienne modulée par une phase de vortex
+theta3 = np.arctan2(Y-2, X+2) #angle centré en un point (-2,2) (charge +1)
+psi    = np.exp(-0.5 * (X**2 + Y**2) / (2*sigma**2)) * np.exp(1j*theta2)*np.exp(1j*theta3).astype(complex) #gaussienne modulée par une phase de vortex
 psi2D  = psi.flatten() #mise à plat en vecteur 1D pour la résolution matricielle
 
 """Potentiel"""
