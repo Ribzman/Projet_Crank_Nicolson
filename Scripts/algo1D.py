@@ -5,7 +5,7 @@ from scipy.sparse import diags #Utile pour créer les matrices diagonnales.
 from scipy.sparse.linalg import spsolve #Pour resoudre les equations avec des matrices creuses.
 
 """Constantes du problème"""
-g = 1 #intensité des interaction entre bosons
+g = 10 #intensité des interaction entre bosons
 L =  20 #Longueur de l'axe X
 Nx = 2000 #Nombre de valeur de x
 dx = np.sqrt(1/np.abs(g))*(2*L)/(Nx) #Pas d'espace
