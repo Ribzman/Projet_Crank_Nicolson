@@ -6,9 +6,9 @@ from matplotlib.animation import FuncAnimation
 
 """Constantes Physiques"""
 tmax = 5000 #nombre maximal d'itération de la boucle d'animation
-Nx, Ny = 100, 100 #longueur et largeur de la grille 
+Nx, Ny = 64, 64 #longueur et largeur de la grille 
 N  = Nx * Ny #taille totale de la grille aplatie en 1D
-L  = 30 #demi-taille physique du système (domaine de -L à +L)
+L  = 10 #demi-taille physique du système (domaine de -L à +L)
 g  = 10 #constante d'interaction entre les bosons 
 phys_time = 0 #temps physique cumulé
 step = 1 #nombre de pas de temps effectués par frame
@@ -26,7 +26,7 @@ ry = -dt / (4j * dy**2) #coefficient de Crank-Nicolson selon y
 X, Y = np.meshgrid(x, y) #grille 2D de coordonnées spatiales
 
 """Condition Initiale"""
-sigma  = 4 #largeur du paquet d'onde gaussien initial
+sigma  = 3 #largeur du paquet d'onde gaussien initial
 theta  = np.arctan2(Y, X) #angle centré à l'origine (charge +1)
 theta2 = np.arctan2(Y+2, X-2) #angle centré en un point (2,-2) (charge +1)
 theta2 = np.arctan2(Y-2, X+2) #angle centré en un point (-2,2) (charge +1)
